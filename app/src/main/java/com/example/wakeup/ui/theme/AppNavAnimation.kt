@@ -55,7 +55,7 @@ fun NavHostSetup(navController: NavHostController, darkTheme: Boolean, onToggleT
                 null
             }
         }) {
-            MyScreen(navController, darkTheme = darkTheme, onToggleTheme = onToggleTheme)
+            MyScreen(navController)
         }
 
         composable("settings_screen", enterTransition = {
@@ -95,7 +95,7 @@ fun NavHostSetup(navController: NavHostController, darkTheme: Boolean, onToggleT
                 null
             }
         }) {
-            SettingsScreen(navController, darkTheme = darkTheme, onToggleTheme = onToggleTheme)
+            SettingsScreen(navController, onToggleTheme = onToggleTheme)
         }
     }
 }

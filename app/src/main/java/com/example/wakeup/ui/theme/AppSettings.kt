@@ -11,7 +11,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -62,7 +61,7 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun SettingsScreen(navController: NavHostController, darkTheme: Boolean, onToggleTheme: () -> Unit)
+fun SettingsScreen(navController: NavHostController, onToggleTheme: () -> Unit)
 {
     val context = LocalContext.current
     val alarmTime by context.alarmTimePreference.collectAsState(initial = "Set Alarm Time")
@@ -70,9 +69,9 @@ fun SettingsScreen(navController: NavHostController, darkTheme: Boolean, onToggl
     val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        SettingBackgroundScreen() // Use the same background
+        SettingBackgroundScreen()
         Column(modifier = Modifier.fillMaxSize()) {
-            TopBar() // Add the TopBar
+            TopBar()
             Spacer(modifier = Modifier.height(0.dp))
             Text(text = "Settings", fontWeight = FontWeight.Bold, fontSize = 48.sp, fontFamily = FontFamily.Serif, color = MaterialTheme.colorScheme.primary, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
             Column(modifier = Modifier
@@ -80,31 +79,21 @@ fun SettingsScreen(navController: NavHostController, darkTheme: Boolean, onToggl
                 .padding(0.dp), verticalArrangement = Arrangement.spacedBy(15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 BasicOutlinedButton(text = alarmTime, icon = Icons.Default.Settings, onClick = {
                     showAlarmBox = !showAlarmBox
-                    Log.d("SettingsScreen", "Alarm time button clicked")
                 })
-                BasicOutlinedButton(text = "Clear Alarm Time", icon = Icons.Default.Clear, // Use a clear icon
-                    onClick = {
-                        coroutineScope.launch {
-                            context.clearAlarmTimePreference() // Clear the alarm time from DataStore
-                            Log.d("SettingsScreen", "Alarm time cleared")
-                        }
-                    })
-
-                BasicOutlinedButton(text = "Change App Theme", icon = Icons.Default.Info, onClick = {
-                    onToggleTheme() // Ensure only one box is visible at a time
-                })
-                Spacer(modifier = Modifier.weight(1f))
-
-                AlarmBox(isVisible = showAlarmBox, onTimeSelected = { time ->
+                BasicOutlinedButton(text = "Clear Alarm Time", icon = Icons.Default.Clear, onClick = {
                     coroutineScope.launch {
-                        context.setAlarmTimePreference("Alarm time is: $time") // New: Save the alarm time to DataStore
-                        Log.d("SettingsScreen", "Alarm time selected: $time")
-                        scheduleAlarm(context, time) // Schedule the alarm
-                        Log.d("SettingsScreen", "scheduleAlarm called")
+                        context.clearAlarmTimePreference()
+                    }
+                })
+                BasicOutlinedButton(text = "Change App Theme", icon = Icons.Default.Info, onClick = onToggleTheme)
+                Spacer(modifier = Modifier.weight(1f))
+                AlarmBox(isVisible = showAlarmBox) { time ->
+                    coroutineScope.launch {
+                        context.setAlarmTimePreference("Alarm time is: $time")
+                        scheduleAlarm(context, time)
                     }
                     showAlarmBox = false
-                })
-
+                }
                 BottomBar(navController)
             }
         }
@@ -114,18 +103,12 @@ fun SettingsScreen(navController: NavHostController, darkTheme: Boolean, onToggl
 @Composable
 fun BasicOutlinedButton(text: String, icon: ImageVector, onClick: () -> Unit)
 {
-    OutlinedButton(onClick = onClick, colors = ButtonDefaults.outlinedButtonColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
-    ), shape = RoundedCornerShape(100.dp), // Rounded corners
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 45.dp) // Padding to align with screen width
-    ) {
+    OutlinedButton(onClick = onClick, colors = ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary), shape = RoundedCornerShape(100.dp), modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 45.dp)) {
         Icon(imageVector = icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
         Text(text = text, fontSize = 15.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
     }
-
 }
 
 @Composable
@@ -159,63 +142,56 @@ fun AlarmBox(isVisible: Boolean, onTimeSelected: (String) -> Unit)
 
 fun scheduleAlarm(context: Context, alarmTime: String)
 {
-    Log.d("AlarmScheduler", "scheduleAlarm called with time: $alarmTime") // Log when the function is called
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-    { // Check if the app can schedule exact alarms
+    {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (!alarmManager.canScheduleExactAlarms())
-        { // Prompt the user to grant permission
+        {
             val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
             context.startActivity(intent)
-            Log.d("AlarmScheduler", "Exact alarm scheduling not permitted, requesting permission")
             return
         }
     }
-
     val calendar = Calendar.getInstance()
     val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
     try
     {
-        val parsedTime = timeFormat.parse(alarmTime)
-        if (parsedTime != null) {
-            // Set the calendar's time to the parsed time but keep the current date
-            calendar.apply {
-                val currentCalendar = Calendar.getInstance()
-                time = parsedTime
-                set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR))
-                set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH))
-                set(Calendar.DAY_OF_MONTH, currentCalendar.get(Calendar.DAY_OF_MONTH))
-            }
-            Log.d("AlarmScheduler", "Parsed time successfully: ${calendar.time}")
-        } else {
+        val parsedTime = timeFormat.parse(alarmTime) ?: run {
             Toast.makeText(context, "Invalid alarm time format", Toast.LENGTH_SHORT).show()
-            Log.d("AlarmScheduler", "Failed to parse alarm time")
             return
         }
-    } catch (e: Exception) {
+
+        calendar.apply {
+            val currentCalendar = Calendar.getInstance()
+            time = parsedTime
+            set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR))
+            set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH))
+            set(Calendar.DAY_OF_MONTH, currentCalendar.get(Calendar.DAY_OF_MONTH))
+        }
+
+        if (calendar.timeInMillis < System.currentTimeMillis())
+        {
+            calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+        {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        }
+        else
+        {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        }
+    }
+    catch (e: Exception)
+    {
         Toast.makeText(context, "Error parsing alarm time", Toast.LENGTH_SHORT).show()
-        Log.e("AlarmScheduler", "Error parsing time", e)
-        return
     }
-    if (calendar.timeInMillis < System.currentTimeMillis()) {
-        calendar.add(Calendar.DAY_OF_MONTH, 1)
-        Log.d("AlarmScheduler", "Alarm time is in the past; scheduling for the next day")
-    }
-
-
-    // Create an intent to trigger AlarmReceiver
-    val intent = Intent(context, AlarmReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-    } else {
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-    }
-    Log.d("AlarmScheduler", "Alarm set for: ${calendar.timeInMillis}")
 }
 
 /*
