@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ButtonDefaults
@@ -28,9 +29,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,15 +47,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.wakeup.data.ThemePreference.alarmTimePreference
+import com.example.wakeup.data.ThemePreference.clearAlarmTimePreference
+import com.example.wakeup.data.ThemePreference.setAlarmTimePreference
 import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 @Composable
 fun SettingsScreen(navController: NavHostController, darkTheme: Boolean, onToggleTheme: () -> Unit)
 {
+    val context = LocalContext.current
+    val alarmTime by context.alarmTimePreference.collectAsState(initial = "Set Alarm Time")
     var showAlarmBox by remember { mutableStateOf(false) }
-    var alarmTime by remember { mutableStateOf("Set Alarm Time") }
+    val coroutineScope = rememberCoroutineScope()
 
     Box(modifier = Modifier.fillMaxSize()) {
         SettingBackgroundScreen() // Use the same background
@@ -66,13 +76,22 @@ fun SettingsScreen(navController: NavHostController, darkTheme: Boolean, onToggl
                 BasicOutlinedButton(text = alarmTime, icon = Icons.Default.Settings, onClick = {
                     showAlarmBox = !showAlarmBox
                 })
+                BasicOutlinedButton(text = "Clear Alarm Time", icon = Icons.Default.Clear, // Use a clear icon
+                    onClick = {
+                        coroutineScope.launch {
+                            context.clearAlarmTimePreference() // Clear the alarm time from DataStore
+                        }
+                    })
+
                 BasicOutlinedButton(text = "Change App Theme", icon = Icons.Default.Info, onClick = {
                     onToggleTheme() // Ensure only one box is visible at a time
                 })
                 Spacer(modifier = Modifier.weight(1f))
 
                 AlarmBox(isVisible = showAlarmBox, onTimeSelected = { time ->
-                    alarmTime = "Alarm time is: $time"
+                    coroutineScope.launch {
+                        context.setAlarmTimePreference("Alarm time is: $time") // New: Save the alarm time to DataStore
+                    }
                     showAlarmBox = false
                 })
 
@@ -105,8 +124,8 @@ fun AlarmTimePicker(onTimeSelected: (String) -> Unit)
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    val timePickerDialog = TimePickerDialog(context, { _, hourOfDay, minute ->
-        val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute)
+    val timePickerDialog = TimePickerDialog(context, { _, _, _ ->
+        val formattedTime = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(calendar.time)
         onTimeSelected(formattedTime)
     }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false)
 
@@ -138,8 +157,7 @@ fun Preview()
             SettingBackgroundScreen()
             Column(modifier = Modifier.fillMaxSize()) {
                 Spacer(modifier = Modifier.weight(1f))
-                val navController = rememberNavController()
-                //SettingsScreen(navController)
+                val navController = rememberNavController() //SettingsScreen(navController)
             }
         }
     }
