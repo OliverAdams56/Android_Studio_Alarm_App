@@ -41,6 +41,13 @@ class MainActivity : ComponentActivity()
                 Toast.makeText(this, "Notification permission not granted", Toast.LENGTH_SHORT).show()
             }
         }
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
 
         setContent {
             val context = applicationContext
@@ -55,15 +62,6 @@ class MainActivity : ComponentActivity()
                         context.setThemePreference(!darkTheme)
                     }
                 })
-            }
-
-            // Check and request notification permission if necessary
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            {
-                if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
-                {
-                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                }
             }
         }
     }
