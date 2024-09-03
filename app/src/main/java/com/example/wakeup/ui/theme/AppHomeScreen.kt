@@ -5,6 +5,7 @@
 package com.example.wakeup.ui.theme
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -81,23 +83,20 @@ fun getCurrentTime(): String
 fun CustomSlider()
 {
     var sliderValue by remember { mutableFloatStateOf(0f) }
-    val valueRange = 0f..1f // Slider range from 0 to 1
-    val totalDurationInMillis = 90000f // Duration to reach max in milliseconds (1.5 minutes)
+    val valueRange = 0f..1f
+    val totalDurationInMillis = 90000f
 
     Column(modifier = Modifier
-        .padding(horizontal = 30.dp) // Add some horizontal padding
-        .padding(vertical = 10.dp), // Add vertical padding for spacing
-        verticalArrangement = Arrangement.Center, // Center contents vertically
-        horizontalAlignment = Alignment.CenterHorizontally // Center contents horizontally
-    ) {
-        Slider(value = sliderValue, onValueChange = { newValue -> // Smooth out slider value changes
+        .padding(horizontal = 30.dp)
+        .padding(vertical = 10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        Slider(value = sliderValue, onValueChange = { newValue ->
             sliderValue += ((newValue - sliderValue) / (totalDurationInMillis / 1000))
-            sliderValue = sliderValue.coerceIn(valueRange) // Keep value within range
-        }, valueRange = valueRange // Set range of the slider
-        )
-        Spacer(modifier = Modifier.height(0.dp)) // Spacer to separate Slider and Text
+            sliderValue = sliderValue.coerceIn(valueRange)
+        }, valueRange = valueRange)
+
+        Spacer(modifier = Modifier.height(0.dp))
         Text(
-            text = "Slider Value: ${String.format(Locale.getDefault(), "%.2f", sliderValue)}", // Display slider value
+            text = "Slider Value: ${String.format(Locale.getDefault(), "%.2f", sliderValue)}",
             color = MaterialTheme.colorScheme.primary,
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
@@ -126,7 +125,7 @@ fun Preview1()
                 Clock()
                 Spacer(modifier = Modifier.weight(1f))
                 CustomSlider()
-                Spacer(modifier = Modifier.height(0.dp))
+                Spacer(modifier = Modifier.height(50.dp))
                 val navController = rememberNavController()
                 BottomBar(navController)
             }
