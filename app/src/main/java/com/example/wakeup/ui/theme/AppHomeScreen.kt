@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.wakeup.R
+import com.example.wakeup.data.SliderState
 import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -82,18 +87,23 @@ fun getCurrentTime(): String
 @Composable
 fun CustomSlider()
 {
+    var isEnabled by remember { mutableStateOf(false) }
     var sliderValue by remember { mutableFloatStateOf(0f) }
     val valueRange = 0f..1f
     val totalDurationInMillis = 90000f
+    val sliderState by SliderState.isSliderEnabled.collectAsState()
+
+    LaunchedEffect(sliderState) {
+        isEnabled = sliderState
+    }
 
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
         .padding(vertical = 10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
         Slider(value = sliderValue, onValueChange = { newValue ->
             sliderValue += ((newValue - sliderValue) / (totalDurationInMillis / 1000))
-            sliderValue = sliderValue.coerceIn(valueRange)
-        }, valueRange = valueRange)
-
+            if (isEnabled) sliderValue = sliderValue.coerceIn(valueRange)
+        }, valueRange = valueRange, colors = SliderDefaults.colors(thumbColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, activeTrackColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, inactiveTrackColor = if (isEnabled) (Color.LightGray) else Color.DarkGray))
         Spacer(modifier = Modifier.height(0.dp))
         Text(
             text = "Slider Value: ${String.format(Locale.getDefault(), "%.2f", sliderValue)}",

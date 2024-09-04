@@ -22,7 +22,6 @@ class AlarmReceiver : BroadcastReceiver()
         val notificationId = 1
         val channelId = "alarm_channel"
 
-        // Play the alarm sound
         playAlarmSound(context)
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -47,6 +46,9 @@ class AlarmReceiver : BroadcastReceiver()
                 val notification = NotificationCompat.Builder(context, channelId).setContentTitle("Alarm").setContentText("Your alarm time has been reached!").setSmallIcon(ic_stat_name).setPriority(NotificationCompat.PRIORITY_HIGH).setSound(Uri.parse("android.resource://${context.packageName}/$paino")).setAutoCancel(true).build()
 
                 notificationManagerCompat.notify(notificationId, notification)
+
+                // Update SliderState to enable the slider (TEST)
+                SliderState.setSliderEnabled(true)
             }
             else
             {
@@ -58,11 +60,14 @@ class AlarmReceiver : BroadcastReceiver()
             val notification = NotificationCompat.Builder(context, channelId).setContentTitle("Alarm").setContentText("Your alarm time has been reached!").setSmallIcon(ic_stat_name).setPriority(NotificationCompat.PRIORITY_HIGH).setAutoCancel(true).build()
 
             notificationManager.notify(notificationId, notification)
+
+            // Update SliderState to enable the slider (TEST)
+            SliderState.setSliderEnabled(true)
+
         }
     }
 }
 
-// Play the alarm sound
 private fun playAlarmSound(context: Context)
 {
     val mediaPlayer = MediaPlayer.create(context, paino)
