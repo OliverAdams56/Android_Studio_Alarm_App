@@ -2,6 +2,7 @@ package com.example.wakeup
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -10,13 +11,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.wakeup.data.ThemePreference.setThemePreference
 import com.example.wakeup.data.ThemePreference.themePreference
+import com.example.wakeup.ui.theme.MainBackgroundScreen
+import com.example.wakeup.ui.theme.MyScreen
 import com.example.wakeup.ui.theme.NavHostSetup
+import com.example.wakeup.ui.theme.SettingsScreen
 import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 import kotlinx.coroutines.launch
 
@@ -30,7 +40,6 @@ class MainActivity : ComponentActivity()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Initialize permission launcher
         requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted)
             {
@@ -67,43 +76,46 @@ class MainActivity : ComponentActivity()
     }
 }
 
-/*
-    @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
-    @Preview(
-        showBackground = true,
-        name = "Home Screen",
-        fontScale = 1f,
-        uiMode = Configuration.UI_MODE_TYPE_NORMAL,
-    )
-    @Composable
-    fun Preview()
-    {
+@Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
+@Preview(
+    showBackground = true,
+    name = "Home Screen",
+    fontScale = 1f,
+    uiMode = Configuration.UI_MODE_TYPE_NORMAL,
+)
+@Composable
+fun Preview()
+{
+
+    WakeUpTheme(darkTheme = true){
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()
             Column(modifier = Modifier.fillMaxSize()) {
-                val navController = rememberNavController() //MyScreen(navController)
-            }
-        }
-    }
-
-    @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
-    @Preview(
-        showBackground = true,
-        name = "Setting Screen",
-        fontScale = 1f,
-        uiMode = Configuration.UI_MODE_TYPE_NORMAL,
-    )
-    @Composable
-    fun Preview0()
-    {
-        WakeUpTheme {
-            Box(modifier = Modifier.fillMaxSize()) {
-                MainBackgroundScreen()
-                Column(modifier = Modifier.fillMaxSize()) {
-                    val navController = rememberNavController() //SettingsScreen(navController)
-                }
+                val navController = rememberNavController()
+                MyScreen(navController)
             }
         }
     }
 }
-*/
+
+@Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
+@Preview(
+    showBackground = true,
+    name = "Setting Screen",
+    fontScale = 1f,
+    uiMode = Configuration.UI_MODE_TYPE_NORMAL,
+)
+@Composable
+fun Preview0()
+{
+    WakeUpTheme {
+        Box(modifier = Modifier.fillMaxSize()) {
+            MainBackgroundScreen()
+            Column(modifier = Modifier.fillMaxSize()) {
+                val navController = rememberNavController()
+
+                SettingsScreen(navController, onToggleTheme = {})
+            }
+        }
+    }
+}

@@ -9,6 +9,7 @@ import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
@@ -48,13 +49,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.wakeup.data.AlarmReceiver
 import com.example.wakeup.data.ThemePreference.alarmTimePreference
 import com.example.wakeup.data.ThemePreference.clearAlarmTimePreference
 import com.example.wakeup.data.ThemePreference.setAlarmTimePreference
+import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -194,7 +198,7 @@ fun scheduleAlarm(context: Context, alarmTime: String)
     }
 }
 
-/*
+
 @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
 @Preview(
     showBackground = true,
@@ -210,9 +214,9 @@ fun Preview()
             SettingBackgroundScreen()
             Column(modifier = Modifier.fillMaxSize()) {
                 Spacer(modifier = Modifier.weight(1f))
-                val navController = rememberNavController() //SettingsScreen(navController)
+                val navController = rememberNavController()
+                SettingsScreen(navController, onToggleTheme = {})
             }
         }
     }
 }
- */
