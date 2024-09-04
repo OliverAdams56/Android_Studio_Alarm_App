@@ -47,7 +47,6 @@ class AlarmReceiver : BroadcastReceiver()
 
                 notificationManagerCompat.notify(notificationId, notification)
 
-                // Update SliderState to enable the slider (TEST)
                 SliderState.setSliderEnabled(true)
             }
             else
@@ -61,9 +60,7 @@ class AlarmReceiver : BroadcastReceiver()
 
             notificationManager.notify(notificationId, notification)
 
-            // Update SliderState to enable the slider (TEST)
             SliderState.setSliderEnabled(true)
-
         }
     }
 }
