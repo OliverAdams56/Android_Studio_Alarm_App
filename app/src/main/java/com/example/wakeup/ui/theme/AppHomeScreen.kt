@@ -4,8 +4,9 @@
 
 package com.example.wakeup.ui.theme
 
+import android.content.Context
 import android.content.res.Configuration
-import android.widget.Toast
+import android.media.MediaPlayer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,15 +88,30 @@ fun getCurrentTime(): String
 @Composable
 fun CustomSlider()
 {
-    var isEnabled by remember { mutableStateOf(false) }
     var sliderValue by remember { mutableFloatStateOf(0f) }
     val valueRange = 0f..1f
     val totalDurationInMillis = 90000f
-    val sliderState by SliderState.isSliderEnabled.collectAsState()
+    val isEnabled by SliderState.isSliderEnabled.collectAsState()
 
-    LaunchedEffect(sliderState) {
-        isEnabled = sliderState
+    val context = LocalContext.current
+    LaunchedEffect(isEnabled) {
+        if (isEnabled)
+        {
+            initializeMediaPlayer(context)
+        }
+        else
+        {
+            releaseMediaPlayer()
+        }
     }
+    LaunchedEffect(sliderValue) {
+        if (sliderValue >= .9f && isEnabled)
+        {
+            releaseMediaPlayer()
+            SliderState.setSliderEnabled(false)
+        }
+    }
+
 
     Column(modifier = Modifier
         .padding(horizontal = 30.dp)
@@ -103,7 +119,7 @@ fun CustomSlider()
         Slider(value = sliderValue, onValueChange = { newValue ->
             sliderValue += ((newValue - sliderValue) / (totalDurationInMillis / 1000))
             if (isEnabled) sliderValue = sliderValue.coerceIn(valueRange)
-        }, valueRange = valueRange, colors = SliderDefaults.colors(thumbColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, activeTrackColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, inactiveTrackColor = if (isEnabled) (Color.LightGray) else Color.DarkGray))
+        }, valueRange = valueRange, enabled = isEnabled, colors = SliderDefaults.colors(thumbColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, activeTrackColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, inactiveTrackColor = if (isEnabled) (Color.LightGray) else Color.DarkGray))
         Spacer(modifier = Modifier.height(0.dp))
         Text(
             text = "Slider Value: ${String.format(Locale.getDefault(), "%.2f", sliderValue)}",
@@ -115,6 +131,23 @@ fun CustomSlider()
         )
     }
 }
+
+private var mediaPlayer: MediaPlayer? = null
+private fun initializeMediaPlayer(context: Context)
+{
+    mediaPlayer?.release()
+    mediaPlayer = MediaPlayer.create(context, R.raw.paino).apply {
+        setOnCompletionListener { mp -> mp.release() }
+        start()
+    }
+}
+
+private fun releaseMediaPlayer()
+{
+    mediaPlayer?.release()
+    mediaPlayer = null
+}
+
 
 @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
 @Preview(
@@ -135,7 +168,7 @@ fun Preview1()
                 Clock()
                 Spacer(modifier = Modifier.weight(1f))
                 CustomSlider()
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(0.dp))
                 val navController = rememberNavController()
                 BottomBar(navController)
             }
