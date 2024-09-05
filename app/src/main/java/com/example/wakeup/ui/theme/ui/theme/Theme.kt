@@ -17,19 +17,17 @@ import androidx.compose.ui.unit.sp
 import com.example.wakeup.R
 
 
-// Define custom colors
-val PrimaryColor = Color(0xFFFFC0CB) // Light pink
-val SecondaryColor = Color(0xFF985174) // Main background color
-val OnPrimaryColor = Color.DarkGray // Text color on primary surfaces
 
-val KobePurple = Color(0xFF552583) // Lakers Purple
-val KobeGold = Color(0xFFFFD700) // Lakers Gold
-val OnKobePrimaryColor = Color.White // Text color on Kobe primary surfaces
+val PrimaryColor = Color(0xFFFFC0CB)
+val SecondaryColor = Color(0xFF985174)
+val OnPrimaryColor = Color.DarkGray
 
+val KobePurple = Color(0xFF552583)
+val KobeGold = Color(0xFFFFD700)
+val OnKobePrimaryColor = Color.White
 
 val QwitcherGrypen = FontFamily(Font(R.font.qwitchergrypen_bold, FontWeight.ExtraBold))
 
-// Define typography styles
 val AppTypography = Typography(
     headlineLarge = TextStyle(
         fontFamily = QwitcherGrypen,
@@ -41,7 +39,6 @@ val AppTypography = Typography(
     )
 )
 
-// Define shapes
 val AppShapes = Shapes(
     small = RoundedCornerShape(8.dp),
     medium = RoundedCornerShape(16.dp),

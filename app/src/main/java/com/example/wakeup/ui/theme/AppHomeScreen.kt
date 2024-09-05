@@ -70,7 +70,7 @@ fun Clock() {
     LaunchedEffect(Unit) {
         while (true) {
             time = getCurrentTime()
-            delay(1000) // Update every second
+            delay(1000)
         }
     }
     Text(
@@ -110,8 +110,6 @@ fun CustomSlider() {
             SliderState.setSliderEnabled(false)
         }
     }
-
-
     Column(
         modifier = Modifier
             .padding(horizontal = 30.dp)
@@ -154,7 +152,6 @@ private fun releaseMediaPlayer() {
     mediaPlayer?.release()
     mediaPlayer = null
 }
-
 
 @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
 @Preview(

@@ -228,7 +228,6 @@ fun scheduleAlarm(context: Context, alarmTime: String) {
     }
 }
 
-
 @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
 @Preview(
     showBackground = true,
