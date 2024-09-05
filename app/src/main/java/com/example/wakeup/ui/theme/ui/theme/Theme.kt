@@ -30,17 +30,45 @@ val OnKobePrimaryColor = Color.White // Text color on Kobe primary surfaces
 val QwitcherGrypen = FontFamily(Font(R.font.qwitchergrypen_bold, FontWeight.ExtraBold))
 
 // Define typography styles
-val AppTypography = Typography(headlineLarge = TextStyle(fontFamily = QwitcherGrypen, fontWeight = FontWeight.ExtraBold, fontSize = 100.sp, letterSpacing = 0.sp), bodyMedium = TextStyle(fontFamily = QwitcherGrypen, fontWeight = FontWeight.Normal, fontSize = 15.sp))
+val AppTypography = Typography(
+    headlineLarge = TextStyle(
+        fontFamily = QwitcherGrypen,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 100.sp,
+        letterSpacing = 0.sp
+    ), bodyMedium = TextStyle(
+        fontFamily = QwitcherGrypen, fontWeight = FontWeight.Normal, fontSize = 15.sp
+    )
+)
 
 // Define shapes
-val AppShapes = Shapes(small = RoundedCornerShape(8.dp), medium = RoundedCornerShape(16.dp), large = RoundedCornerShape(32.dp))
+val AppShapes = Shapes(
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(32.dp)
+)
 
-private val LightAppColorScheme = lightColorScheme(primary = PrimaryColor, onPrimary = OnPrimaryColor, secondary = SecondaryColor, surface = PrimaryColor, background = SecondaryColor, onBackground = OnPrimaryColor)
-private val DarkAppColorScheme = darkColorScheme(primary = KobePurple, onPrimary = OnKobePrimaryColor, secondary = KobeGold, surface = KobePurple, background = KobeGold, onBackground = OnKobePrimaryColor)
+private val LightAppColorScheme = lightColorScheme(
+    primary = PrimaryColor,
+    onPrimary = OnPrimaryColor,
+    secondary = SecondaryColor,
+    surface = PrimaryColor,
+    background = SecondaryColor,
+    onBackground = OnPrimaryColor
+)
+private val DarkAppColorScheme = darkColorScheme(
+    primary = KobePurple,
+    onPrimary = OnKobePrimaryColor,
+    secondary = KobeGold,
+    surface = KobePurple,
+    background = KobeGold,
+    onBackground = OnKobePrimaryColor
+)
 
 @Composable
-fun WakeUpTheme(darkTheme: Boolean = false, content: @Composable () -> Unit)
-{
+fun WakeUpTheme(darkTheme: Boolean = false, content: @Composable () -> Unit) {
     val colorScheme = if (darkTheme) DarkAppColorScheme else LightAppColorScheme
-    MaterialTheme(colorScheme = colorScheme, typography = AppTypography, shapes = AppShapes, content = content)
+    MaterialTheme(
+        colorScheme = colorScheme, typography = AppTypography, shapes = AppShapes, content = content
+    )
 }

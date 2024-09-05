@@ -32,12 +32,17 @@ import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar()
-{
-    Surface(modifier = Modifier
-        .fillMaxWidth()
-        .clip(RoundedCornerShape(bottomStart = 80.dp, bottomEnd = 80.dp)), color = Color.Transparent) {
-        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary, titleContentColor = MaterialTheme.colorScheme.onPrimary), modifier = Modifier.fillMaxWidth(), title = {
+fun TopBar() {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(bottomStart = 80.dp, bottomEnd = 80.dp)),
+        color = Color.Transparent
+    ) {
+        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
+        ), modifier = Modifier.fillMaxWidth(), title = {
             Text(
                 text = "Wake Up",
                 fontWeight = FontWeight.ExtraBold,
@@ -59,8 +64,7 @@ fun TopBar()
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-fun Preview3()
-{
+fun Preview3() {
     WakeUpTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()

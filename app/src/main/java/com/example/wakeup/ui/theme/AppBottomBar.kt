@@ -31,24 +31,47 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 
 @Composable
-fun BottomBar(navController: NavController)
-{
+fun BottomBar(navController: NavController) {
     Surface(modifier = Modifier.fillMaxWidth()) {
-        BottomAppBar(containerColor = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.fillMaxWidth()) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable {
-                    navController.navigate("main_screen") {
-                        popUpTo("main_screen") { inclusive = true }
-                    }
-                }) {
-                    Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.onPrimary)
-                    Text(text = "Home", fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimary)
+        BottomAppBar(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable {
+                        navController.navigate("main_screen") {
+                            popUpTo("main_screen") { inclusive = true }
+                        }
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = "Home",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Text(
+                        text = "Home", fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.clickable {
-                    navController.navigate("settings_screen")
-                }) {
-                    Icon(imageVector = Icons.Default.Settings, contentDescription = "Settings", tint = MaterialTheme.colorScheme.onPrimary)
-                    Text(text = "Settings", fontSize = 12.sp, color = MaterialTheme.colorScheme.onPrimary)
+                Column(horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable {
+                        navController.navigate("settings_screen")
+                    }) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Text(
+                        text = "Settings",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
@@ -63,8 +86,7 @@ fun BottomBar(navController: NavController)
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-fun Preview5()
-{
+fun Preview5() {
     WakeUpTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()

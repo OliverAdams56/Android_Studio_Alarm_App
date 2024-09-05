@@ -15,43 +15,38 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 @Composable
-fun NavHostSetup(navController: NavHostController, darkTheme: Boolean, onToggleTheme: () -> Unit)
-{
+fun NavHostSetup(navController: NavHostController, darkTheme: Boolean, onToggleTheme: () -> Unit) {
     NavHost(navController = navController, startDestination = "main_screen") {
         composable("main_screen", enterTransition = {
-            if (initialState.destination.route != "main_screen")
-            {
-                fadeIn(animationSpec = tween(1500)) + scaleIn(initialScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (initialState.destination.route != "main_screen") {
+                fadeIn(animationSpec = tween(1500)) + scaleIn(
+                    initialScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }, exitTransition = {
-            if (targetState.destination.route != "main_screen")
-            {
-                fadeOut(animationSpec = tween(1500)) + scaleOut(targetScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (targetState.destination.route != "main_screen") {
+                fadeOut(animationSpec = tween(1500)) + scaleOut(
+                    targetScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }, popEnterTransition = {
-            if (initialState.destination.route != "main_screen")
-            {
-                fadeIn(animationSpec = tween(1500)) + scaleIn(initialScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (initialState.destination.route != "main_screen") {
+                fadeIn(animationSpec = tween(1500)) + scaleIn(
+                    initialScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }, popExitTransition = {
-            if (targetState.destination.route != "main_screen")
-            {
-                fadeOut(animationSpec = tween(1500)) + scaleOut(targetScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (targetState.destination.route != "main_screen") {
+                fadeOut(animationSpec = tween(1500)) + scaleOut(
+                    targetScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }) {
@@ -59,39 +54,35 @@ fun NavHostSetup(navController: NavHostController, darkTheme: Boolean, onToggleT
         }
 
         composable("settings_screen", enterTransition = {
-            if (initialState.destination.route != "settings_screen")
-            {
-                fadeIn(animationSpec = tween(1500)) + scaleIn(initialScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (initialState.destination.route != "settings_screen") {
+                fadeIn(animationSpec = tween(1500)) + scaleIn(
+                    initialScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }, exitTransition = {
-            if (targetState.destination.route != "settings_screen")
-            {
-                fadeOut(animationSpec = tween(1500)) + scaleOut(targetScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (targetState.destination.route != "settings_screen") {
+                fadeOut(animationSpec = tween(1500)) + scaleOut(
+                    targetScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }, popEnterTransition = {
-            if (initialState.destination.route != "settings_screen")
-            {
-                fadeIn(animationSpec = tween(1500)) + scaleIn(initialScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (initialState.destination.route != "settings_screen") {
+                fadeIn(animationSpec = tween(1500)) + scaleIn(
+                    initialScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }, popExitTransition = {
-            if (targetState.destination.route != "settings_screen")
-            {
-                fadeOut(animationSpec = tween(1500)) + scaleOut(targetScale = 1f, animationSpec = tween(1500))
-            }
-            else
-            {
+            if (targetState.destination.route != "settings_screen") {
+                fadeOut(animationSpec = tween(1500)) + scaleOut(
+                    targetScale = 1f, animationSpec = tween(1500)
+                )
+            } else {
                 null
             }
         }) {

@@ -15,19 +15,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 
 @Composable
-fun MainBackgroundScreen()
-{
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.secondary))
+fun MainBackgroundScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondary)
+    )
 }
 
 @Composable
-fun SettingBackgroundScreen()
-{
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.secondary))
+fun SettingBackgroundScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondary)
+    )
 }
 
 @Preview(device = "spec:id=reference_foldable,shape=Normal,width=673,height=841,unit=dp,dpi=420")
@@ -38,8 +40,7 @@ fun SettingBackgroundScreen()
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-fun Preview4()
-{
+fun Preview4() {
     WakeUpTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()

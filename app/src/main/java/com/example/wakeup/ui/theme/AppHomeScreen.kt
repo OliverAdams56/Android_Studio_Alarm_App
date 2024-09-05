@@ -48,8 +48,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun MyScreen(navController: NavHostController)
-{
+fun MyScreen(navController: NavHostController) {
     Box(modifier = Modifier.fillMaxSize()) {
         MainBackgroundScreen()
         Column(modifier = Modifier.fillMaxSize()) {
@@ -65,29 +64,33 @@ fun MyScreen(navController: NavHostController)
 }
 
 @Composable
-fun Clock()
-{
+fun Clock() {
     var time by remember { mutableStateOf(getCurrentTime()) }
 
     LaunchedEffect(Unit) {
-        while (true)
-        {
+        while (true) {
             time = getCurrentTime()
             delay(1000) // Update every second
         }
     }
-    Text(text = time, fontWeight = FontWeight.Bold, fontSize = 48.sp, fontFamily = FontFamily.Serif, color = MaterialTheme.colorScheme.primary, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+    Text(
+        text = time,
+        fontWeight = FontWeight.Bold,
+        fontSize = 48.sp,
+        fontFamily = FontFamily.Serif,
+        color = MaterialTheme.colorScheme.primary,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
-fun getCurrentTime(): String
-{
+fun getCurrentTime(): String {
     val dateFormat = SimpleDateFormat("hh:mm:ss a", Locale.getDefault())
     return dateFormat.format(Date())
 }
 
 @Composable
-fun CustomSlider()
-{
+fun CustomSlider() {
     var sliderValue by remember { mutableFloatStateOf(0f) }
     val valueRange = 0f..1f
     val totalDurationInMillis = 90000f
@@ -95,31 +98,37 @@ fun CustomSlider()
 
     val context = LocalContext.current
     LaunchedEffect(isEnabled) {
-        if (isEnabled)
-        {
+        if (isEnabled) {
             initializeMediaPlayer(context)
-        }
-        else
-        {
+        } else {
             releaseMediaPlayer()
         }
     }
     LaunchedEffect(sliderValue) {
-        if (sliderValue >= .9f && isEnabled)
-        {
+        if (sliderValue >= .9f && isEnabled) {
             releaseMediaPlayer()
             SliderState.setSliderEnabled(false)
         }
     }
 
 
-    Column(modifier = Modifier
-        .padding(horizontal = 30.dp)
-        .padding(vertical = 10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Slider(value = sliderValue, onValueChange = { newValue ->
-            sliderValue += ((newValue - sliderValue) / (totalDurationInMillis / 1000))
-            if (isEnabled) sliderValue = sliderValue.coerceIn(valueRange)
-        }, valueRange = valueRange, enabled = isEnabled, colors = SliderDefaults.colors(thumbColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, activeTrackColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray, inactiveTrackColor = if (isEnabled) (Color.LightGray) else Color.DarkGray))
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 30.dp)
+            .padding(vertical = 10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Slider(
+            value = sliderValue, onValueChange = { newValue ->
+                sliderValue += ((newValue - sliderValue) / (totalDurationInMillis / 1000))
+                if (isEnabled) sliderValue = sliderValue.coerceIn(valueRange)
+            }, valueRange = valueRange, enabled = isEnabled, colors = SliderDefaults.colors(
+                thumbColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray,
+                activeTrackColor = if (isEnabled) (MaterialTheme.colorScheme.primary) else Color.DarkGray,
+                inactiveTrackColor = if (isEnabled) (Color.LightGray) else Color.DarkGray
+            )
+        )
         Spacer(modifier = Modifier.height(0.dp))
         Text(
             text = "Slider Value: ${String.format(Locale.getDefault(), "%.2f", sliderValue)}",
@@ -133,8 +142,7 @@ fun CustomSlider()
 }
 
 private var mediaPlayer: MediaPlayer? = null
-private fun initializeMediaPlayer(context: Context)
-{
+private fun initializeMediaPlayer(context: Context) {
     mediaPlayer?.release()
     mediaPlayer = MediaPlayer.create(context, R.raw.paino).apply {
         setOnCompletionListener { mp -> mp.release() }
@@ -142,8 +150,7 @@ private fun initializeMediaPlayer(context: Context)
     }
 }
 
-private fun releaseMediaPlayer()
-{
+private fun releaseMediaPlayer() {
     mediaPlayer?.release()
     mediaPlayer = null
 }
@@ -157,8 +164,7 @@ private fun releaseMediaPlayer()
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-fun Preview1()
-{
+fun Preview1() {
     WakeUpTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()

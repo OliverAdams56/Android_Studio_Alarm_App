@@ -30,30 +30,26 @@ import com.example.wakeup.ui.theme.SettingsScreen
 import com.example.wakeup.ui.theme.ui.theme.WakeUpTheme
 import kotlinx.coroutines.launch
 
-
-class MainActivity : ComponentActivity()
-{
+class MainActivity : ComponentActivity() {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted)
-            {
-                Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
+                    Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(this, "Notification permission not granted", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
-            else
-            {
-                Toast.makeText(this, "Notification permission not granted", Toast.LENGTH_SHORT).show()
-            }
-        }
-        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED)
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            {
+
+        if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
@@ -84,10 +80,9 @@ class MainActivity : ComponentActivity()
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-fun Preview()
-{
+fun Preview() {
 
-    WakeUpTheme(darkTheme = true){
+    WakeUpTheme(darkTheme = true) {
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()
             Column(modifier = Modifier.fillMaxSize()) {
@@ -106,8 +101,7 @@ fun Preview()
     uiMode = Configuration.UI_MODE_TYPE_NORMAL,
 )
 @Composable
-fun Preview0()
-{
+fun Preview0() {
     WakeUpTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             MainBackgroundScreen()
