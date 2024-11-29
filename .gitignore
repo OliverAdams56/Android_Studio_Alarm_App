@@ -1,0 +1,34 @@
+# IDE and Editor Files
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Build Artifacts
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+out/
+gen/
+build/
+
+# Gradle Files
+.gradle/
+
+# Android Studio/Gradle Build Files
+local.properties
+.externalNativeBuild/
+.cxx/
+captures/
+
+# Eclipse Project Files (if used)
+.classpath
+.project
+
+# Old Build System Files
+build.xml
+ant.properties
+project.properties
